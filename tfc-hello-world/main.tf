@@ -1,3 +1,14 @@
+terraform {
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "iman-hashicorp"
+
+    workspaces {
+      name = "terraform-chip-vault"
+    }
+  }
+}
+
 provider "aws" {
   version = "2.33.0"
 
@@ -16,9 +27,15 @@ resource "aws_dynamodb_table" "tfc_example_table" {
   read_capacity  = var.db_read_capacity
   write_capacity = var.db_write_capacity
   hash_key       = "UUID"
+  range_key      = "UserName"
 
   attribute {
     name = "UUID"
+    type = "S"
+  }
+
+  attribute {
+    name = "UserName"
     type = "S"
   }
 }
